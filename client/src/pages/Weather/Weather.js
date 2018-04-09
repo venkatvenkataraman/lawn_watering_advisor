@@ -10,7 +10,6 @@ import API from "../../utils/API";
 import { Col, Row, Container } from "../../components/Grid";
 // import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table-next';
 import BootstrapTable from 'react-bootstrap-table-next';
-// import TableHeaderColumn from 'react-bootstrap-table-next';
 import './react-bootstrap-table2.css'
 // import { List } from "../../components/List";
 
@@ -21,9 +20,16 @@ console.log("In client/src/pages/Weather/Weather.js");
 //     {epoch: 1523318400, day: "Thu", timeDate: "7:00 PM CDT on April 05, 2018", tempHigh: 79, tempLow: 68, avgHum: 86, pop:40, conditions: "Thunderstorm", conditionsURL: <img src="http://icons.wxug.com/i/c/k/clear.gif" alt=""/> }
 // ];
 
+// <img src="http://icons.wxug.com/i/c/k/clear.gif" alt=""/>
+function imageFormatter(cell, row){
+    // return "<img src='"+cell+"' alt='image'/>" ;
+    // return '<Image src="'+cell+'" alt="image"/>' ;
+    return '<img src="'+cell+'" alt="image"/>' ;
+}
+
 const columns = [{
   dataField: 'epoch',
-  text: 'Epoch'
+  text: 'Epoch Time'
 },{
   dataField: 'day',
   text: 'Day'
@@ -47,14 +53,10 @@ const columns = [{
   text: "Conditions"
 }, {
   dataField:'conditionsURL',
-  text: "Conditions URL"
+  text: "Conditions URL",
+  formatter: imageFormatter
 }];
 
-// imageFormatter = (cell, row) => {
-
-//   function imageFormatter(cell, row){
-//     return "<img src='"+cell+"'/>" ;
-// }
 
 class Weather extends Component {
   state = {
@@ -109,13 +111,6 @@ class Weather extends Component {
 
               <BootstrapTable data={ this.state.weatherTableData } columns={ columns } keyField="epoch" striped={true} hover={true} />
 
-              {/* FOLLOWING DOESN'T SEEM TO WORK */}
-              {/* <BootstrapTable data={this.state.weatherTableData} striped={true} hover={true}>
-                  <TableHeaderColumn dataField="day" dataSort={true}>Day</TableHeaderColumn>
-                  <TableHeaderColumn dataField="timeDate" dataSort={true}>Time & Date</TableHeaderColumn> */}
-                  {/* <TableHeaderColumn dataField="conditionsURL" dataFormat={imageFormatter}>Weather Image</TableHeaderColumn> */}
-              {/* </BootstrapTable> */}
-
 
               {/* <div className="table-responsive">          
                 <table className="table">
@@ -129,6 +124,7 @@ class Weather extends Component {
                         <th>Average Humidity</th>
                         <th>Probability of Precipitation (PoP)</th>
                         <th>Conditions</th>
+                        <th> </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -136,10 +132,11 @@ class Weather extends Component {
                         <td>{ this.state.weatherTableData.epoch }</td>
                         <td>{ this.state.weatherTableData.timeDate }</td>
                         <td>{ this.state.weatherTableData.highTemp }</td>
-                        <td>35</td>
-                        <td>New York</td>
-                        <td>USA</td>
-                        <td>USA</td>
+                        <td>{ this.state.weatherTableData.lowTemp }</td>
+                        <td>{ this.state.weatherTableData.avgHum }</td>
+                        <td>{ this.state.weatherTableData.pop }</td>
+                        <td>{ this.state.weatherTableData.conditions }</td>
+                        <td>{ '<img src="'+ this.state.weatherTableData.conditionsURL+'" alt="image"/>' }</td>
                       </tr>
                     </tbody>
                 </table>

@@ -34,8 +34,8 @@ module.exports = {
                                               conditions:  response.data.forecast.simpleforecast.forecastday[index].conditions,
                                               // <img src="http://icons.wxug.com/i/c/k/clear.gif" alt=""/>
                                               // <img src="http://icons.wxug.com/i/c/k/cloudy.gif" alt=""/>
-                                              // conditionsURL:  "'"+'<img src="'+response.data.forecast.simpleforecast.forecastday[index].icon_url+'" alt=""/>'+"'",
-                                           conditionsURL:  '<img src="'+response.data.forecast.simpleforecast.forecastday[index].icon_url+'" alt=""/>',
+                                          //  conditionsURL:  '<img src="'+response.data.forecast.simpleforecast.forecastday[index].icon_url+'" alt=""/>',
+                                           conditionsURL:  response.data.forecast.simpleforecast.forecastday[index].icon_url,
                                                   avgHum:  response.data.forecast.simpleforecast.forecastday[index].avehumidity,
                                                      pop:  response.data.forecast.simpleforecast.forecastday[index].pop
                                           };
