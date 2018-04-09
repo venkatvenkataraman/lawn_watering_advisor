@@ -17,7 +17,8 @@ console.log("In client/src/pages/Weather/Weather.js");
 
 
 // var tableData = [
-//     {epoch: 1523318400, day: "Thu", timeDate: "7:00 PM CDT on April 05, 2018", tempHigh: 79, tempLow: 68, avgHum: 86, pop:40, conditions: "Thunderstorm", conditionsURL: <img src="http://icons.wxug.com/i/c/k/clear.gif" alt=""/> }
+//     {epoch: 1523318400, day: "Thu", timeDate: "7:00 PM CDT on April 05, 2018", tempHigh: 79, tempLow: 68, 
+//      avgHum: 86, pop:40, conditions: "Thunderstorm", conditionsURL: <img src="http://icons.wxug.com/i/c/k/clear.gif" alt=""/> }
 // ];
 
 // <img src="http://icons.wxug.com/i/c/k/clear.gif" alt=""/>
