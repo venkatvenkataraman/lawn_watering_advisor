@@ -28,6 +28,18 @@ mongoose.connect(
   // }
 );
 
+var dbase = mongoose.connection;
+
+//show any mongoose errors
+dbase.on('error', function(err){
+  console.log("Mongoose Error: ", err);
+});
+
+//once logged in to the db through mongoose, log a success message
+dbase.once("open", function() {
+  console.log("Mongoose connection successful.");
+});
+
 // Start the API server
 app.listen(PORT, () =>
   console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`)
