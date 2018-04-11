@@ -1,0 +1,65 @@
+import React, { Component } from "react";
+import BootstrapTable from 'react-bootstrap-table-next';
+
+// function priceFormatter(cell, row) {
+//   if (row.onSale) {
+//     return (
+//       <span>
+//         <strong style={ { color: 'red' } }>$ { cell } NTD(Sales!!)</strong>
+//       </span>
+//     );
+//   }
+// return (
+//     <span>$ { cell } NTD</span>
+//   );
+// }
+
+  function imageFormatter(cell, row){
+    return (
+       <img src={""+cell+""} alt=" "/>
+    );
+   }
+
+// const columns = [
+// // omit...
+// {
+//   dataField: 'price',
+//   text: 'Product Price',
+//   formatter: priceFormatter
+// }];
+
+const columns = [{
+    dataField:'conditionsURL',
+    text: "Conditions URL",
+    formatter: imageFormatter
+  }];
+
+const data = [{
+    id: 1523404800,
+    conditionsURL: "http://icons.wxug.com/i/c/k/clear.gif"
+ }, {
+    id: 1523664000,
+    conditionsURL: "http://icons.wxug.com/i/c/k/chancetstorms.gif"
+ }
+]
+
+class Weather extends Component {
+        render() {
+            return (
+
+                    // <BootstrapTable
+                    //   keyField="id"
+                    //   data={ products }
+                    //   columns={ columns }
+                    // />
+
+                    <BootstrapTable
+                        keyField="id"
+                        data={ data }
+                        columns={ columns } 
+                    />
+            );
+        }
+  }
+
+  export default Weather;

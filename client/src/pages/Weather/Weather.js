@@ -23,9 +23,9 @@ console.log("In client/src/pages/Weather/Weather.js");
 
 // <img src="http://icons.wxug.com/i/c/k/clear.gif" alt=""/>
 function imageFormatter(cell, row){
-    // return "<img src='"+cell+"' alt='image'/>" ;
-    // return '<Image src="'+cell+'" alt="image"/>' ;
-    return '<img src="'+cell+'" alt="image"/>' ;
+    return (
+        <img src={""+cell+""} alt="weatherImage"/>
+    );
 }
 
 const columns = [{
@@ -110,8 +110,7 @@ class Weather extends Component {
         <Row>
            <Col size="md-12">   
 
-              <BootstrapTable data={ this.state.weatherTableData } columns={ columns } keyField="epoch" striped={true} hover={true} />
-
+              <BootstrapTable data={ this.state.weatherTableData } columns={ columns } keyField="epoch" striped={true} hover={true} responsive={true} />
 
               {/* <div className="table-responsive">          
                 <table className="table">
@@ -119,25 +118,14 @@ class Weather extends Component {
                      <tr>
                         <th>Epoch Time</th>
                         <th>Day</th>
-                        <th>Time & Date</th>
-                        <th>High Temp F</th>
-                        <th>Low Temp F</th>
-                        <th>Average Humidity</th>
-                        <th>Probability of Precipitation (PoP)</th>
-                        <th>Conditions</th>
-                        <th> </th>
+                        ...
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>{ this.state.weatherTableData.epoch }</td>
-                        <td>{ this.state.weatherTableData.timeDate }</td>
-                        <td>{ this.state.weatherTableData.highTemp }</td>
-                        <td>{ this.state.weatherTableData.lowTemp }</td>
-                        <td>{ this.state.weatherTableData.avgHum }</td>
-                        <td>{ this.state.weatherTableData.pop }</td>
-                        <td>{ this.state.weatherTableData.conditions }</td>
-                        <td>{ '<img src="'+ this.state.weatherTableData.conditionsURL+'" alt="image"/>' }</td>
+                        <td>{ this.state.weatherTableData.day }</td>
+                        ...
                       </tr>
                     </tbody>
                 </table>
