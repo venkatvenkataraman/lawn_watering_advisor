@@ -1,1 +1,2 @@
 mongoimport --db LawnWateringAdvisorDB --collection wateringzones --drop --jsonArray --file wateringZoneSeeds.json
+mongoimport --db LawnWateringAdvisorDB --collection citywateringrests --drop --file cityRestrSeeds.json
