@@ -8,6 +8,7 @@ import Landing from './Landing';
 import WeatherForecast from "./Weather";
 import ZoneInfo from "./Zone";
 import Dashboard from "./Dashboard";
+import Test from "./pages/Test/Test";
 
 
 class App extends Component {
@@ -20,7 +21,8 @@ class App extends Component {
 				<BrowserRouter>	
 					<div className="container">
 						<Header />
-						<Route exact path="/" component={Landing} />
+						<Route exact path="/" component={Test} />
+						<Route exact path="/test" component={Test} />
 						<Route exact path="/Zone" component={ZoneInfo} />
 						<Route exact path="/WF" component={WeatherForecast} />
 						<Route exact path="/Dashboard" component={Dashboard} />

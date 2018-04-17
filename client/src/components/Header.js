@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import "./header.css";
 // import Payments from './Payments';
 
 class Header extends Component {
@@ -32,7 +33,7 @@ class Header extends Component {
 						to={this.props.auth ? '/WF' : '/'} 
 						className="left brand-logo"
 						>
-							Lawn Watering Advisor
+						EcoScape <i class="fas fa-tint"></i>
 						</Link>
 					<ul className="right">
 						{this.renderContent()}
