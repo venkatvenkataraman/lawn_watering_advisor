@@ -9,6 +9,7 @@ import WeatherForecast from "./pages/Weather";
 // import Saved from "./pages/Saved";
 // import NoMatch from "./pages/NoMatch";
 import Nav from "./components/Nav";
+import Test from "./pages/Test/Test";
 
 const App = () =>
   <Router>
@@ -16,6 +17,7 @@ const App = () =>
       <Nav />
       <Switch>
         <Route exact path="/" component={WeatherForecast} />
+        <Route exact path="/test" component={Test} />
         {/* <Route exact path="/saved" component={Saved} />
         <Route component={NoMatch} /> */}
       </Switch>
