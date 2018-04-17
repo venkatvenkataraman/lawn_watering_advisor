@@ -19,7 +19,7 @@ const Nav = () => (
           <span className="icon-bar" />
         </button>
         <Link className="navbar-brand" to="/">
-        <h5>SprinkYours <i class="fas fa-tint"></i></h5>
+        <h5>EcoScape <i class="fas fa-tint"></i></h5>
         </Link>
       </div>
       <div className="collapse navbar-collapse navbar-ex1-collapse">

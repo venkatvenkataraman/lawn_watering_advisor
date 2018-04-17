@@ -18,7 +18,7 @@ class Header extends Component {
 
 				<div className="header__text-box">
 					<h1 className="heading-primary">
-						<span class="heading-primary--main">SprinkYours</span>
+						<span className="heading-primary--main">EcoScape</span>
 						<span className="heading-primary--sub">Your grass will always be greener</span>
 					</h1>
 
