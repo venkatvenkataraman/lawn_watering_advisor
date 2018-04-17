@@ -1,36 +1,40 @@
 {
-  "name": "lawn_watering_advisor",
+  "name": "server",
   "version": "1.0.0",
-  "description": "Lawn Watering Advisor App",
-  "main": "server.js",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": "8.9.4",
+    "npm": "5.6.0"
+  },
   "scripts": {
-    "server": "node server.js",
-    "client": "cd client && npm run start",
-    "start": "concurrently \"nodemon server.js\" \"npm run client\"",
-    "build": "cd client && npm run build",
-    "deploy": "yarn build && git add . && git commit -m \"Building for production\" && git push heroku master",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "installDeps": "yarn && cd client && yarn"
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "webhook": "forever sendgrid_webhook.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/venkatvenkataraman/lawn_watering_advisor.git"
-  },
-  "author": "Venkat Venkataraman",
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/venkatvenkataraman/lawn_watering_advisor/issues"
-  },
-  "homepage": "https://github.com/venkatvenkataraman/lawn_watering_advisor#readme",
-  "devDependencies": {
-    "concurrently": "^3.5.1",
-    "nodemon": "^1.12.1"
-  },
   "dependencies": {
-    "axios": "^0.18.0",
     "body-parser": "^1.18.2",
+    "concurrently": "^3.5.1",
+    "cookie-session": "^2.0.0-beta.3",
     "express": "^4.16.3",
-    "jquery": "^3.3.1",
-    "mongoose": "^5.0.12"
+    "localtunnel": "^1.9.0",
+    "lodash": "^4.17.5",
+    "mongoose": "^5.0.13",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.17.3",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth20": "^1.0.0",
+    "path-parser": "^2.0.2",
+    "sendgrid": "^5.2.3",
+    "stripe": "^5.8.0"
+  },
+  "devDependencies": {
+    "forever": "^0.15.3"
   }
 }

@@ -1,0 +1,1 @@
+mongoimport --db LawnWateringAdvisorDB --collection wateringzones --drop --jsonArray --file wateringZoneSeeds.json
