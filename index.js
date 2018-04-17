@@ -40,8 +40,9 @@ app.use(passport.session());
 
 //routes
 require('./routes/authRoutes')(app);	//user authentication
-require('./routes/weatherDB')(app);	//DB routes
+require('./routes/weatherDB')(app);	//weather DB routes
 require('./routes/weatherUnderground')(app);	//DB routes
+require('./routes/zoneDB')(app);	//zone DB routes
 // require('./routes/api/index')(app);	//DB routes
 // require('./routes/api/weatherDB')(app);	//DB routes
 // require('./routes/api/weatherUnderground')(app); //weatherUnderground API routes

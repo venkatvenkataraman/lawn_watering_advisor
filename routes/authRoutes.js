@@ -14,7 +14,7 @@ module.exports = (app) => {
 	}));
 
 	// app.get('/auth/google/callback', passport.authenticate('google', {successRedirect: '/surveys', failureRedirect: '/'}));
-	app.get('/auth/google/callback', passport.authenticate('google', {successRedirect: '/WF', failureRedirect: '/'}));
+	app.get('/auth/google/callback', passport.authenticate('google', {successRedirect: '/Dashboard', failureRedirect: '/'}));
 
 
 	//facebook authentication
@@ -24,7 +24,7 @@ module.exports = (app) => {
 	}));
 
 	// app.get('/auth/facebook/callback', passport.authenticate('facebook', {successRedirect: '/surveys', failureRedirect: '/failed'}));
-	app.get('/auth/facebook/callback', passport.authenticate('facebook', {successRedirect: '/WF', failureRedirect: '/failed'}));
+	app.get('/auth/facebook/callback', passport.authenticate('facebook', {successRedirect: '/Dashboard', failureRedirect: '/failed'}));
 
 	//user profile
 	

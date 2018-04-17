@@ -26,32 +26,41 @@ function imageFormatter(cell, row){
 }
 
 const columns = [{
-  dataField: 'epoch',
-  text: 'Epoch Time'
-},{
+//   dataField: 'epoch',
+//   text: 'Epoch Time',
+//   align: 'center'
+// },{
   dataField: 'day',
-  text: 'Day'
+  text: 'Day',
+  align: 'center'
 }, {
   dataField: 'timeDate',
-  text: 'Time and Date'
+  text: 'Time and Date',
+  align: 'center'
 }, {
   dataField: 'tempHigh',
-  text: 'High Temp F'
+  text: 'High Temp F',
+  align: 'center'
 }, {
   dataField: 'tempLow',
-  text: 'Low Temp F'
+  text: 'Low Temp F',
+  align: 'center'
 }, {
   dataField:'avgHum',
-  text: "Average Humidity"
+  text: "Average Humidity %",
+  align: 'center'
 }, {
   dataField:'pop',
-  text: "Probability of Precipitation (PoP)"
+  text: "Probability of Precipitation (PoP)",
+  align: 'center'
 }, {
   dataField:'conditions',
-  text: "Conditions"
+  text: "Conditions",
+  align: 'center'
 }, {
   dataField:'conditionsURL',
   text: "Conditions URL",
+  align: 'center', 
   formatter: imageFormatter
 }];
 
@@ -92,13 +101,13 @@ class Weather extends Component {
     return (
       <div>
             <Jumbotron>
-              <h3 className="text-center">
-                <strong>Austin, TX: 10-day Weather Forecast</strong>
-              </h3>
+              <h6 className="text-center">
+                Austin, TX: 10-day Weather Forecast
+              </h6>
             </Jumbotron>
-            <button className="btn btn-primary btn-sm" onClick={this.displayWeatherForecast}>Display Stored Weather Forecast</button>
-            <button className="btn btn-success btn-sm" onClick={this.getWeatherForecast}>Update Stored Weather Forecast</button>           
-            <button className="btn btn-warning btn-sm" onClick={this.deleteWeatherForecastInDB}>Delete Stored Weather Forecast</button>          
+            <button className="btn btn-primary btn-sm" onClick={this.displayWeatherForecast}>Display Weather Forecast</button>
+            <button className="btn btn-success btn-sm" onClick={this.getWeatherForecast}>Update Weather Forecast</button>           
+            <button className="btn btn-warning btn-sm" onClick={this.deleteWeatherForecastInDB}>Delete Weather Forecast</button>          
 
             <BootstrapTable data={ this.state.weatherTableData } columns={ columns } keyField="epoch" striped={true} hover={true} responsive={true} />
 
