@@ -24,10 +24,10 @@ const Nav = () => (
       <div className="collapse navbar-collapse navbar-ex1-collapse">
         <ul className="nav navbar-nav navbar-right">
           <li>
-            <Link to="/">Nav Link1</Link>
+            <Link to="/auth/google">One click Sign-up / Sign-In with Google!</Link>
           </li>
           <li>
-            <Link to="/saved">Nav Link2</Link>
+            <Link to="/api/logout">Logout</Link>
           </li>
         </ul>
       </div>
