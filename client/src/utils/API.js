@@ -30,4 +30,14 @@ export default {
     return axios.get("/api/zoneDB");
   },
 
+
+//CityRestr DB API Functions
+
+deleteCityRestrInDB: function() {
+  return axios.delete("/api/cityRestr");
+},
+readCityRestrFromDB: function() {
+return axios.get("/api/cityRestr");
+},
+
 };

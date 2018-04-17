@@ -131,12 +131,42 @@ const zoneColumns = [{
   formatter: zoneImageFormatter
 }];
 
+const cityRestrColumns = [{
+  dataField: 'wateringDay1',
+  text: 'Watering Day #1',
+  align: 'center'
+},{
+  dataField: 'wateringDay2',
+  text: 'Watering Day #2',
+  align: 'center'
+}, {
+  dataField: 'wateringDay3',
+  text: 'Watering Day #3',
+  align: 'center'
+}, {
+  dataField: "wateringTimes1Start",
+  text: 'Watering Times #1 Start',
+  align: 'center'
+},{
+  dataField: "wateringTimes1End",
+  text: 'Watering Times #1 End',
+  align: 'center'
+}, {
+  dataField: 'wateringTimes2Start',
+  text: 'Watering Times #2 Start',
+  align: 'center'
+},{
+  dataField: 'wateringTimes2End',
+  text: 'Watering Times #2 End',
+  align: 'center'
+}];
+
 
 class Dashboard extends Component {
   state = {
     weatherTableData: [],
+    cityRestrData: [],
     wateringZoneData: []
-
   };
 
   /////////////////////////////////////
@@ -197,11 +227,42 @@ class Dashboard extends Component {
     //    .then (console.log("In Zone.js/getWateringZone"));
   }
 
+  /////////////////////////////////////
+  
+  displayCityRestr = () =>
+  {
+    API.readCityRestrFromDB()
+    .then(res =>
+      this.setState({
+        cityRestrData: res.data
+      })
+    )
+    .then(res => console.log(this.state.cityRestrData))
+    .catch(err => console.log(err));
+  }
+
+  deleteCityRestr = () =>
+  {
+    API.deleteCityRestrInDB();
+  }
+
+  getCityRestr = () => {
+    console.log("In Dashboard.js/getCityRestr");
+    API.readCityRestrFromDB();
+
+    // API.deleteWateringZoneInDB()
+    //    .then (console.log("In Zone.js/getWateringZone. Old deleted. Now we will get a new"))
+    //    .then (response => API.getWateringZone())
+    //    .then (console.log("In Zone.js/getWateringZone"));
+  }
+
 
 
   render() {
     return (
       <div>
+
+          <div>
             <Jumbotron>
               <h6 className="text-center">
                 <strong>Lawn Watering Zones</strong>
@@ -211,7 +272,21 @@ class Dashboard extends Component {
             <button className="btn btn-success btn-sm" onClick={this.getWateringZone}>Update Stored Zone Info</button>           
             <button className="btn btn-warning btn-sm" onClick={this.deleteWateringZoneInDB}>Delete Stored Zone Info</button>          
             <BootstrapTable data={ this.state.wateringZoneData } columns={ zoneColumns } keyField="zoneNumber" striped={true} hover={true} responsive={true} />
-  
+          </div>
+
+          <div>
+            <Jumbotron>
+              <h6 className="text-center">
+                <strong>City Water Restrictions for Address</strong>
+              </h6>
+            </Jumbotron>
+            <button className="btn btn-primary btn-sm" onClick={this.displayCityRestr}>Display City Restrictions</button>
+            <button className="btn btn-success btn-sm" onClick={this.getCityRestr}>Update City Restrictions/button</button>           
+            <button className="btn btn-warning btn-sm" onClick={this.deleteCityRestr}>Delete Stored Restrictions</button>          
+            <BootstrapTable data={ this.state.cityRestrData } columns={ cityRestrColumns } keyField="_id" striped={true} hover={true} responsive={true} />
+          </div>
+
+          <div>
             <Jumbotron>
               <h6 className="text-center">
                 Austin, TX: 10-day Weather Forecast
@@ -222,9 +297,10 @@ class Dashboard extends Component {
             <button className="btn btn-warning btn-sm" onClick={this.deleteWeatherForecastInDB}>Delete Weather Forecast</button>          
 
             <BootstrapTable data={ this.state.weatherTableData } columns={ weatherColumns } keyField="epoch" striped={true} hover={true} responsive={true} />
-   
+          </div>
             <Footer/>
       </div>
+      
     );
   }
 }
