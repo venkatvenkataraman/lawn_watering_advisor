@@ -44,6 +44,7 @@ require('./routes/weatherDB')(app);	//weather DB routes
 require('./routes/weatherUnderground')(app);	//DB routes
 require('./routes/zoneDB')(app);	//zone DB routes
 require('./routes/cityRestr')(app);	//city Restriction routes
+require('./routes/watsonHelp')(app);	//watson api route
 
 // Serve up static assets
 if (process.env.NODE_ENV === 'production') {

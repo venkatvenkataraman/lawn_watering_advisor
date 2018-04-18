@@ -40,4 +40,9 @@ readCityRestrFromDB: function() {
 return axios.get("/api/cityRestr");
 },
 
+//Uploading zone images to Watson and classifying the images
+computeZoneStatus: function() {
+return axios.get("/api/watsonHelp");
+}
+
 };
