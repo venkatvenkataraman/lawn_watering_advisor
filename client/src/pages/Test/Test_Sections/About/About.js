@@ -19,7 +19,7 @@ class About extends Component {
 							The power of science in the palm of your hand
 						</h3>
 						<p className="paragraph">
-							Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus error dicta perferendis obcaecati labore unde soluta voluptate hic id nobis dolorum ullam vero temporibus placeat saepe quaerat, at rem tempora!
+							
 						</p>
 					</div>
 					<div className="col-1-of-2">
@@ -27,7 +27,7 @@ class About extends Component {
 							No landscape is too big or too small
 						</h3>
 						<p className="paragraph">
-							Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus error dicta perferendis obcaecati labore unde soluta voluptate hic id nobis dolorum ullam vero temporibus placeat saepe quaerat, at rem tempora!
+							From a homeowner wanting to have the best lawn on the block to the landscaper responsible for hundreds of acres, everything comes down to the single blade of grass. By focusing on the micro level, EcoScape improves the entire macro level.
 						</p>
 					</div>
 				</div>

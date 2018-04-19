@@ -3,7 +3,8 @@ import Jumbotron from "../Jumbotron";
 import Footer from "../Footer";
 import API from "../../utils/API";
 import BootstrapTable from 'react-bootstrap-table-next';
-import './react-bootstrap-table2.css'
+import './react-bootstrap-table2.css';
+import './dashboard.css';
 
 console.log("In client/src/pages/Dashboard/Dashboard.js");
 
@@ -266,46 +267,54 @@ class Dashboard extends Component {
 
   render() {
     return (
-      <div>
-
-          <div>
-            <Jumbotron>
-              <h6 className="text-center">
-                <strong>Lawn Watering Zones</strong>
-              </h6>
-            </Jumbotron>
+      <div className="dashboard">
+        <div className="dashboard__header">
+          <h6 className="dashboard__header--title">
+            <strong>Lawn Watering Zones</strong>
+          </h6>
+        </div>
+        <div className="dashboard__table">
+          <div className="dashboard__btn">
             <button className="btn btn-primary btn-sm" onClick={this.displayWateringZone}>Display Stored Zone Info</button>
             <button className="btn btn-success btn-sm" onClick={this.getWateringZone}>Update Stored Zone Info</button>           
-            <button className="btn btn-warning btn-sm" onClick={this.deleteWateringZoneInDB}>Delete Stored Zone Info</button>          
-            <button className="btn btn-primary btn-sm" onClick={this.computeZoneStatus}>Determine Zone Status</button>
-            <BootstrapTable data={ this.state.wateringZoneData } columns={ zoneColumns } keyField="zoneNumber" striped={true} hover={true} responsive={true} />
-          </div>
+            <button className="btn btn-warning btn-sm" onClick={this.deleteWateringZoneInDB}>Delete Stored Zone Info</button>  
+            <button className="btn btn-primary btn-sm" onClick={this.computeZoneStatus}>Determine Zone Status</button>  
+          </div>      
+          <BootstrapTable data={ this.state.wateringZoneData } columns={ zoneColumns } keyField="zoneNumber" striped={true} hover={true} responsive={true} />
+        </div>
 
-          <div>
-            <Jumbotron>
-              <h6 className="text-center">
-                <strong>City Water Restrictions for Address</strong>
-              </h6>
-            </Jumbotron>
+        <div className="dashboard__header dashboard__restriction">
+          <h6 className="text-center">
+            <strong>City Water Restrictions for Address</strong>
+          </h6>
+        </div>
+
+        <div className="dashboard__table">
+          <div className="dashboard__btn">
             <button className="btn btn-primary btn-sm" onClick={this.displayCityRestr}>Display City Restrictions</button>
-            <button className="btn btn-success btn-sm" onClick={this.getCityRestr}>Update City Restrictions/button</button>           
-            <button className="btn btn-warning btn-sm" onClick={this.deleteCityRestr}>Delete Stored Restrictions</button>          
-            <BootstrapTable data={ this.state.cityRestrData } columns={ cityRestrColumns } keyField="_id" striped={true} hover={true} responsive={true} />
+            <button className="btn btn-success btn-sm" onClick={this.getCityRestr}>Update City Restrictions</button>           
+            <button className="btn btn-warning btn-sm" onClick={this.deleteCityRestr}>Delete Stored Restrictions</button> 
           </div>
 
-          <div>
-            <Jumbotron>
-              <h6 className="text-center">
-                Austin, TX: 10-day Weather Forecast
-              </h6>
-            </Jumbotron>
-            <button className="btn btn-primary btn-sm" onClick={this.displayWeatherForecast}>Display Weather Forecast</button>
-            <button className="btn btn-success btn-sm" onClick={this.getWeatherForecast}>Update Weather Forecast</button>           
-            <button className="btn btn-warning btn-sm" onClick={this.deleteWeatherForecastInDB}>Delete Weather Forecast</button>          
+          <BootstrapTable data={ this.state.cityRestrData } columns={ cityRestrColumns } keyField="_id" striped={true} hover={true} responsive={true} />
+        </div>
 
-            <BootstrapTable data={ this.state.weatherTableData } columns={ weatherColumns } keyField="epoch" striped={true} hover={true} responsive={true} />
-          </div>
-            <Footer/>
+      <div className="dashboard__header dashboard__forecast">
+        <h6 className="text-center">
+          Austin, TX: 10-day Weather Forecast
+        </h6>
+      </div>
+      <div className="dashboard__table">
+        <div className="dashboard__btn">
+          <button className="btn btn-primary btn-sm" onClick={this.displayWeatherForecast}>Display Weather Forecast</button>
+          <button className="btn btn-success btn-sm" onClick={this.getWeatherForecast}>Update Weather Forecast</button>           
+          <button className="btn btn-warning btn-sm" onClick={this.deleteWeatherForecastInDB}>Delete Weather Forecast</button> 
+        </div>         
+
+        <BootstrapTable data={ this.state.weatherTableData } columns={ weatherColumns } keyField="epoch" striped={true} hover={true} responsive={true} />
+      </div>
+
+      <Footer/>
       </div>
       
     );
