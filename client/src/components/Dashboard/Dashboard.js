@@ -278,7 +278,7 @@ class Dashboard extends Component {
             <button className="btn btn-primary btn-sm" onClick={this.displayWateringZone}>Display Stored Zone Info</button>
             <button className="btn btn-success btn-sm" onClick={this.getWateringZone}>Update Stored Zone Info</button>           
             <button className="btn btn-warning btn-sm" onClick={this.deleteWateringZoneInDB}>Delete Stored Zone Info</button>  
-            <button className="btn btn-primary btn-sm" onClick={this.computeZoneStatus}>Determine Zone Status</button>  
+            <button className="btn btn-primary btn-sm" onClick={this.computeZoneStatus}>Determine Watson Zone Classifications</button>  
           </div>      
           <BootstrapTable data={ this.state.wateringZoneData } columns={ zoneColumns } keyField="zoneNumber" striped={true} hover={true} responsive={true} />
         </div>
