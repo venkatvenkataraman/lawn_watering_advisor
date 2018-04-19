@@ -43,15 +43,8 @@ require('./routes/authRoutes')(app);	//user authentication
 require('./routes/weatherDB')(app);	//weather DB routes
 require('./routes/weatherUnderground')(app);	//DB routes
 require('./routes/zoneDB')(app);	//zone DB routes
-// require('./routes/api/index')(app);	//DB routes
-// require('./routes/api/weatherDB')(app);	//DB routes
-// require('./routes/api/weatherUnderground')(app); //weatherUnderground API routes
-
-// const routes = require("./routes");
-// // Add routes, both API and view
-// app.use(routes);
-// require('./routes/billingRoutes')(app);	//billing routes
-// require('./routes/surveyRoutes')(app);	//survey routes
+require('./routes/cityRestr')(app);	//city Restriction routes
+require('./routes/watsonHelp')(app);	//watson api route
 
 // Serve up static assets
 if (process.env.NODE_ENV === 'production') {

@@ -4,7 +4,9 @@ import Footer from "../Footer";
 import API from "../../utils/API";
 import BootstrapTable from 'react-bootstrap-table-next';
 import './react-bootstrap-table2.css';
-import './dashboard.css';
+import VisualRecognitionV3 from "watson-developer-cloud/visual-recognition/v3";
+import { createReadStream } from "fs";
+
 
 console.log("In client/src/pages/Dashboard/Dashboard.js");
 
@@ -162,6 +164,60 @@ const cityRestrColumns = [{
   align: 'center'
 }];
 
+// ============  Watson related code ===============
+
+
+function askWatsonAboutZone(zoneNumber, zoneImage, cb) {
+  console.log("Inside askwatsonAboutZone. Zone # = & zoneimage " + zoneNumber + zoneImage);
+
+  var visualRecognition = new VisualRecognitionV3({
+    api_key: '96b73c031b0fade5e9797f507c13f34541902f2c',
+    version: '2016-05-20'
+  });
+
+  var images_file= createReadStream(zoneImage);
+  var classifier_ids = ["DefaultCustomModel_30404095"];
+  var threshold = 0.6;
+
+  var params = {
+  images_file: images_file,
+  classifier_ids: classifier_ids,
+  threshold: threshold
+  };
+
+  visualRecognition.classify(params, function(err, response) {
+    if (err) {
+      console.log(err);
+      cb(err);
+    }
+    else {
+      console.log(JSON.stringify(response, null, 2));
+      var watsonClass = JSON.stringify( response.images[0].classifiers[0].classes[0].class);
+      var watsonConfidence = JSON.stringify(response.images[0].classifiers[0].classes[0].score);
+      console.log ('class and confidence are', watsonClass, watsonConfidence);
+      cb(watsonClass);
+    }
+    
+  });
+}
+//  ====== End of Watson related code
+function callWatson(zoneNumber, myZoneData) {
+  askWatsonAboutZone(zoneNumber, myZoneData.zoneImage, function (err, myZoneClass) {
+    if (err)
+      console.log("watson did not classify");
+    else {
+      if (myZoneClass !== 'unkown') {
+        console.log('Watson classified it as ' + myZoneClass);
+      }
+    }
+    if (myZoneClass === 'SickGrass')
+      { myZoneData.watsonImageClass = 'Sick'}
+      else if (myZoneClass === 'HealthyGrass'){
+        myZoneData.myZoneClass = 'Healthy'
+      }
+      else myZoneData.myZoneClass = 'unknown';
+  });
+}
 
 class Dashboard extends Component {
   state = {
@@ -257,64 +313,77 @@ class Dashboard extends Component {
     //    .then (console.log("In Zone.js/getWateringZone"));
   }
 
+// Compute zone status based on some simple logic
+computeZoneStatus = () => {
+  // Look at the zone details in the zone table and determine if and when to water
+  // Ask watson for the image classification. If it syas 'Healthy' then no watering is needed.
+  // If it says 'Sick' then wantering is needed.  As for when to water, you look at the watering restrictions
+  // and decide the earliest time the zone can be watered.
 
-  //Entry function for uploading image to Watson and classifying the image
-  computeZoneStatus = () => {
-    console.log("In Dashboard.js/computeZoneStatus");
-    API.computeZoneStatus();
+  const zoneNumber = 4;  //  *** Hardwired for now ****
+  console.log(this.state.wateringZoneData);
+//  var myZoneData = JSON.parse(this.state.wateringZoneData).wateringZones[zoneNumber];
+var myZoneData = this.state.wateringZoneData[zoneNumber];
+  var myZoneStatus = 'AW'; // Assume the default is already watered
+  var myZoneClass = 'unknown';
+  
+  callWatson(zoneNumber, myZoneData).then
+    if (myZoneData.watsonImageClass === 'Healthy') {
+      console.log ('No watering needed for zone' + zoneNumber);
+      myZoneData.zoneStatus = 'AW';  // pretend it is already watered
+    }
+    else { if (myZoneData.watsonImageClass === 'Sick'){
+            console.log ('Watering Needed for zone'  + zoneNumber)
+            myZoneData.zoneStatus = 'NW';
+      // check watering restrictions and set the next watering date
+      //  *** Need explanation from Venkat on how the watering restrictions are specified
+      }
+    }
+ 
   }
-
 
   render() {
     return (
-      <div className="dashboard">
-        <div className="dashboard__header">
-          <h6 className="dashboard__header--title">
-            <strong>Lawn Watering Zones</strong>
-          </h6>
-        </div>
-        <div className="dashboard__table">
-          <div className="dashboard__btn">
+      <div>
+
+          <div>
+            <Jumbotron>
+              <h6 className="text-center">
+                <strong>Lawn Watering Zones</strong>
+              </h6>
+            </Jumbotron>
             <button className="btn btn-primary btn-sm" onClick={this.displayWateringZone}>Display Stored Zone Info</button>
             <button className="btn btn-success btn-sm" onClick={this.getWateringZone}>Update Stored Zone Info</button>           
-            <button className="btn btn-warning btn-sm" onClick={this.deleteWateringZoneInDB}>Delete Stored Zone Info</button>  
-            <button className="btn btn-primary btn-sm" onClick={this.computeZoneStatus}>Determine Zone Status</button>  
-          </div>      
-          <BootstrapTable data={ this.state.wateringZoneData } columns={ zoneColumns } keyField="zoneNumber" striped={true} hover={true} responsive={true} />
-        </div>
-
-        <div className="dashboard__header dashboard__restriction">
-          <h6 className="text-center">
-            <strong>City Water Restrictions for Address</strong>
-          </h6>
-        </div>
-
-        <div className="dashboard__table">
-          <div className="dashboard__btn">
-            <button className="btn btn-primary btn-sm" onClick={this.displayCityRestr}>Display City Restrictions</button>
-            <button className="btn btn-success btn-sm" onClick={this.getCityRestr}>Update City Restrictions</button>           
-            <button className="btn btn-warning btn-sm" onClick={this.deleteCityRestr}>Delete Stored Restrictions</button> 
+            <button className="btn btn-warning btn-sm" onClick={this.deleteWateringZoneInDB}>Delete Stored Zone Info</button>          
+            <button className="btn btn-primary btn-sm" onClick={this.computeZoneStatus}>Determine Zone Status</button>
+            <BootstrapTable data={ this.state.wateringZoneData } columns={ zoneColumns } keyField="zoneNumber" striped={true} hover={true} responsive={true} />
           </div>
 
-          <BootstrapTable data={ this.state.cityRestrData } columns={ cityRestrColumns } keyField="_id" striped={true} hover={true} responsive={true} />
-        </div>
+          <div>
+            <Jumbotron>
+              <h6 className="text-center">
+                <strong>City Water Restrictions for Address</strong>
+              </h6>
+            </Jumbotron>
+            <button className="btn btn-primary btn-sm" onClick={this.displayCityRestr}>Display City Restrictions</button>
+            <button className="btn btn-success btn-sm" onClick={this.getCityRestr}>Update City Restrictions/button</button>           
+            <button className="btn btn-warning btn-sm" onClick={this.deleteCityRestr}>Delete Stored Restrictions</button>          
+            <BootstrapTable data={ this.state.cityRestrData } columns={ cityRestrColumns } keyField="_id" striped={true} hover={true} responsive={true} />
+          </div>
 
-      <div className="dashboard__header dashboard__forecast">
-        <h6 className="text-center">
-          Austin, TX: 10-day Weather Forecast
-        </h6>
-      </div>
-      <div className="dashboard__table">
-        <div className="dashboard__btn">
-          <button className="btn btn-primary btn-sm" onClick={this.displayWeatherForecast}>Display Weather Forecast</button>
-          <button className="btn btn-success btn-sm" onClick={this.getWeatherForecast}>Update Weather Forecast</button>           
-          <button className="btn btn-warning btn-sm" onClick={this.deleteWeatherForecastInDB}>Delete Weather Forecast</button> 
-        </div>         
+          <div>
+            <Jumbotron>
+              <h6 className="text-center">
+                Austin, TX: 10-day Weather Forecast
+              </h6>
+            </Jumbotron>
+            <button className="btn btn-primary btn-sm" onClick={this.displayWeatherForecast}>Display Weather Forecast</button>
+            <button className="btn btn-success btn-sm" onClick={this.getWeatherForecast}>Update Weather Forecast</button>           
+            <button className="btn btn-warning btn-sm" onClick={this.deleteWeatherForecastInDB}>Delete Weather Forecast</button>          
 
-        <BootstrapTable data={ this.state.weatherTableData } columns={ weatherColumns } keyField="epoch" striped={true} hover={true} responsive={true} />
-      </div>
-
-      <Footer/>
+            <BootstrapTable data={ this.state.weatherTableData } columns={ weatherColumns } keyField="epoch" striped={true} hover={true} responsive={true} />
+          </div>
+            <Footer/>
       </div>
       
     );

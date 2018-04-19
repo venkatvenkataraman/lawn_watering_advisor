@@ -31,6 +31,7 @@
   "drainage": "M",
   "shade": "M",
   "zoneImage": "./assets/images/zone3.jpg",
+  "zoneImageDate": 1524009600,
   "zoneStatus": "NW",
   "wateringState": "OFF",
   "numbOfSprinklers": 4,

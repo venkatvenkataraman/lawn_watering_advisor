@@ -9,7 +9,7 @@ class About extends Component {
 			<section className="section-about">
 				<div className="u-center-text u-margin-bottom-big">
 						<h2 className="heading-secondary">
-								An innovative solution for an innovative age
+							An innovative solution for an innovative age
 						</h2>
 				</div>
 
@@ -19,7 +19,7 @@ class About extends Component {
 							The power of science in the palm of your hand
 						</h3>
 						<p className="paragraph">
-							Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus error dicta perferendis obcaecati labore unde soluta voluptate hic id nobis dolorum ullam vero temporibus placeat saepe quaerat, at rem tempora!
+							Using advanced algorithms and state of the art technology, EcoScape gives you the data you need without you having to spend the time and energy collecting it.
 						</p>
 					</div>
 					<div className="col-1-of-2">
@@ -27,7 +27,7 @@ class About extends Component {
 							No landscape is too big or too small
 						</h3>
 						<p className="paragraph">
-							Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus error dicta perferendis obcaecati labore unde soluta voluptate hic id nobis dolorum ullam vero temporibus placeat saepe quaerat, at rem tempora!
+							From the homeowner wanting to have the best lawn on the block to the landscaper responsible for hundreds of acres, everything comes down to the single blade of grass.
 						</p>
 					</div>
 				</div>

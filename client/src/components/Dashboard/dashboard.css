@@ -36,6 +36,7 @@ td img {
 	margin-top: 1rem;
 }
 
-.dashboard__forecast {
+.dashboard__forecast,
+.dashboard__restriction {
 	border-top: solid 2px #000;
 }
