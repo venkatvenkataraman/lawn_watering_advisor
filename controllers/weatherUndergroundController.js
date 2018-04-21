@@ -1,6 +1,7 @@
 console.log("In controllers/weatherUndergroundController.js");
 const axios = require("axios");
 const db = require("../models");
+const keys = require('./../config/keys');
 
 // BELOW IS A TEST
 // const weatherDBController = require("./weatherDBController");
@@ -10,7 +11,7 @@ const db = require("../models");
 // getWeatherForecast gets a 3-day forecast from Weather Underground API
 module.exports = {
   getWeatherForecast: function(req, res) {
-    const api_key = "90823d1fb375d595";
+    const api_key = keys.wuAPIkey;
     //3-day forecast
     // const api_command = "http://api.wunderground.com/api/"+api_key+"/forecast/q/TX/Austin.json";
     //10-day forecast

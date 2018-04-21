@@ -2,6 +2,7 @@ console.log("In controllers/watsonHelpController.js");
 const db = require("../models");
 const VisualRecognitionV3 = require("watson-developer-cloud/visual-recognition/v3");
 var fs = require("fs");
+const keys = require('./../config/keys');
 
 const axios = require("axios");
 var countOfZoneLoop = 0;
@@ -55,8 +56,8 @@ function updateWateringZoneDB(zoneNumber, watsonClass){
 function askWatsonAboutZone(images_file, cb) {
   
   var visualRecognition = new VisualRecognitionV3({
-    api_key: '96b73c031b0fade5e9797f507c13f34541902f2c',
-    version: '2016-05-20'
+    api_key: keys.watsonAPIkey,
+    version: keys.watsonVersion
   });
 
   // var images_file= fs.createReadStream(zoneImage);
