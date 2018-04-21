@@ -41,8 +41,13 @@ return axios.get("/api/cityRestr");
 },
 
 //Uploading zone images to Watson and classifying the images
-computeZoneStatus: function() {
+computeZoneClass: function() {
 return axios.get("/api/watsonHelp");
+},
+
+//Generate recommendations for Watering
+generateRecommendations: function() {
+return axios.get("/api/generateReco");
 }
 
 };

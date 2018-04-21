@@ -32,10 +32,10 @@ function zoneImageFormatter(cell, row){
 }
 
 const weatherColumns = [{
-//   dataField: 'epoch',
-//   text: 'Epoch Time',
-//   align: 'center'
-// },{
+  dataField: 'epoch',
+  text: 'Epoch Time',
+  align: 'center'
+},{
   dataField: 'day',
   text: 'Day',
   align: 'center'
@@ -73,8 +73,9 @@ const weatherColumns = [{
 const zoneColumns = [{
   dataField: 'zoneNumber',
   text: 'Zone Number',
-  align: 'center',
-  width:'5%'
+  align: 'center'
+  // ,
+  // width:'5%'
 },{
   dataField: 'drainage',
   text: 'Zone Drainage',
@@ -83,13 +84,15 @@ const zoneColumns = [{
 }, {
   dataField: 'shade',
   text: 'Zone Shade',
-  align: 'center',
-  width:'5%'
+  align: 'center'
+  // ,
+  // width:'5%'
 }, {
   dataField: 'watsonImageClass',
   text: 'Image Class',
-  align: 'center',
-  width:'10%'
+  align: 'center'
+  // ,
+  // width:'10%'
 }, {
   dataField:'zoneStatus',
   text: "Zone Status",
@@ -98,38 +101,48 @@ const zoneColumns = [{
 }, {
   dataField:'wateringState',
   text: "Watering State",
-  align: 'center',
-  width:'5%'
+  align: 'center'
+  // ,
+  // width:'5%'
 }, {
   dataField:'numbOfSprinklers',
   text: "Number of Sprinklers",
-  align: 'center',
-  width:'5%'
+  align: 'center'
+  // ,
+  // width:'5%'
 }, {
   dataField:'dtLastWatered',
   text: "Date Last Watered",
   formatter: zoneDateFormatter,
-  align: 'center',
-  width:'15%'
+  align: 'center'
+  // ,
+  // width:'15%'
 }, {
   dataField:'durationOfWatering',
   text: "Duration of Watering (in mts)",
-  align: 'center',
-  width:'5%'
+  align: 'center'
+  // ,
+  // width:'5%'
 }, {
   dataField:'projectedNextWaterDateTime',
   text: "Projected Next Watering",
-  align: 'center',
-  width:'15%'
+  formatter: zoneDateFormatter,
+  align: 'center'
+  // ,
+  // width:'15%'
 }, {
   dataField:'recDurationOfWatering',
   text: "Recommended Next Watering Duration",
-  align: 'center',
-  width:'5%'
+  align: 'center'
+  // ,
+  // width:'5%'
 }, {
   dataField: 'zoneImage',
   text: 'Zone Image',
   formatter: zoneImageFormatter
+}, , {
+  dataField: 'zoneImageDate',
+  text: 'Zone Image Processing Date'
 }];
 
 const cityRestrColumns = [{
@@ -259,9 +272,14 @@ class Dashboard extends Component {
 
 
   //Entry function for uploading image to Watson and classifying the image
-  computeZoneStatus = () => {
-    console.log("In Dashboard.js/computeZoneStatus");
-    API.computeZoneStatus();
+  computeZoneClass = () => {
+    console.log("In Dashboard.js/computeZoneClass");
+    API.computeZoneClass();
+  }
+
+  generateRecommendations = () =>{
+    console.log("In Dashboard.js/generateRecommendations");
+    API.generateRecommendations();
   }
 
 
@@ -278,7 +296,8 @@ class Dashboard extends Component {
             <button className="btn btn-primary btn-sm" onClick={this.displayWateringZone}>Display Stored Zone Info</button>
             <button className="btn btn-success btn-sm" onClick={this.getWateringZone}>Update Stored Zone Info</button>           
             <button className="btn btn-warning btn-sm" onClick={this.deleteWateringZoneInDB}>Delete Stored Zone Info</button>  
-            <button className="btn btn-primary btn-sm" onClick={this.computeZoneStatus}>Determine Watson Zone Classifications</button>  
+            <button className="btn btn-primary btn-sm" onClick={this.computeZoneClass}>Determine Watson Zone Classifications</button>
+            <button className="btn btn-primary btn-sm" onClick={this.generateRecommendations}>Generate Recommendations</button>  
           </div>      
           <BootstrapTable data={ this.state.wateringZoneData } columns={ zoneColumns } keyField="zoneNumber" striped={true} hover={true} responsive={true} />
         </div>

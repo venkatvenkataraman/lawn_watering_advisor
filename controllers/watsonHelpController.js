@@ -1,12 +1,54 @@
 console.log("In controllers/watsonHelpController.js");
 const db = require("../models");
-var inMemZone;
 const VisualRecognitionV3 = require("watson-developer-cloud/visual-recognition/v3");
 var fs = require("fs");
 
 const axios = require("axios");
 var countOfZoneLoop = 0;
 var zonesClassificationData=[];
+
+// === MongoDB update based on Watson Analysis =====
+
+function updateWateringZoneDB(zoneNumber, watsonClass){
+  console.log("Now ready to update watsonImageClass field in the wateringZone DB");
+  db.WateringZone
+  .find({"zoneNumber": zoneNumber}, function(err) {
+   if (!err){ 
+     console.log("In watsonHelpController.js/updateWateringZoneDB #1");
+     console.log("zoneNumber: ", zoneNumber, " watsonClass: ", watsonClass); 
+     // db.WateringZone.update({"zoneNumber": zoneNumber}, {$set: {"projectedNextWaterDateTime": 1523840000}});
+     db.WateringZone.update({"zoneNumber": zoneNumber}, {$set: {"watsonImageClass": watsonClass}}, function(err, raw){
+       if (err) { console.log("database call failed during update of wastonImageClass with error:", err)}
+       else {console.log ("database call succeeded with zoneNumber, watsonImageClass and raw = ",zoneNumber, raw)}
+     });
+     db.WateringZone.update({"zoneNumber": zoneNumber}, {$set: {"zoneImageDate": new Date()}}, function(err, raw){
+      if (err) { console.log("database call failed during update of zoneImageDate with error:", err)}
+      else {console.log ("database call succeeded with zoneNumber, zoneImageDate and raw = ",zoneNumber, raw)}
+    });
+     console.log("zone ", zoneNumber, " should now be updated with watsonImageClass and zoneImageDate!");
+   } else {throw err;}
+   })
+
+  //WORKING CODE BELOW USED ON DEMO DAY
+  // db.WateringZone
+  //  .find({"zoneNumber": zoneNumber}, function(err, inMemZone) {
+  //   if (!err){ 
+  //     console.log("In watsonHelpController.js/writeToWateringZoneDB #1");
+  //     console.log("zoneNumber: ", zoneNumber, " inMemZone: ", inMemZone, "watson class for zone: ", watsonClass);       
+  //   } else {throw err;}
+  //   })
+  //  .then (
+  //     dbWateringZone => {console.log("In watsonHelpController.js/writeToWateringZoneDB #2");
+  //     // inMemZone.watsonImageClass = watsonClass;
+  //     inMemZone[0].watsonImageClass = watsonClass;
+  //     console.log("In watsonHelpController.js/writeToWateringZoneDB #2");
+  //     console.log("zoneNumber: ", zoneNumber, " inMemZone: ", inMemZone)}
+  //  )
+
+   
+  // db.WateringZone[zoneNumber].watsonImageClass = watsonClass;
+  // db.WateringZone[zoneNumber].zoneImageDate = new Date();
+}
 
 // ============  Watson related code ===============
 
@@ -58,28 +100,6 @@ function askWatsonAboutZone(images_file, cb) {
 //     .catch(err => res.status(422).json(err));
 // }
 
-function writeToWateringZoneDB(zoneNumber, watsonClass){
-  console.log("Now ready to update watsonImageClass field in the wateringZone DB");
-   db.WateringZone
-   .find({"zoneNumber": zoneNumber}, function(err, inMemZone) {
-    if (!err){ 
-      console.log("In watsonHelpController.js/writeToWateringZoneDB #1");
-      console.log("zoneNumber: ", zoneNumber, " inMemZone: ", inMemZone, "watson class for zone: ", watsonClass);       
-    } else {throw err;}
-    })
-   .then (
-      dbWateringZone => {console.log("In watsonHelpController.js/writeToWateringZoneDB #2");
-      // inMemZone.watsonImageClass = watsonClass;
-      inMemZone[0].watsonImageClass = watsonClass;
-      console.log("In watsonHelpController.js/writeToWateringZoneDB #2");
-      console.log("zoneNumber: ", zoneNumber, " inMemZone: ", inMemZone)}
-   )
-
-   
-  // db.WateringZone[zoneNumber].watsonImageClass = watsonClass;
-  // db.WateringZone[zoneNumber].zoneImageDate = new Date();
-}
-
 // Compute zone status based on some simple logic
 computeZoneStatus = (zoneNumber,cb) => {
   // Look at the zone details in the zone table and determine if and when to water
@@ -89,47 +109,51 @@ computeZoneStatus = (zoneNumber,cb) => {
 
   // const zoneNumber = 4;  //  *** Hardwired for now ****
   
-  const zoneImage = "./controllers/images/zone"+(zoneNumber+1)+".jpg";
+  const zoneImage = "./controllers/images/zone"+ zoneNumber +".jpg";
   console.log("zoneNumber: ",zoneNumber, "; zone image: ", zoneImage);
   var imageStream = fs.createReadStream(zoneImage);
   var watsonClass = null;
   askWatsonAboutZone(imageStream, function (err, myZoneClass) {
     if (err) {
-      console.log("In watsonHelpController.js/computeZoneStatus #2");
+      console.log("In watsonHelpController.js/computeZoneStatus #1");
       console.log("Sorry! Watson did not classify Zone", zoneNumber);
     }
     else {
-      if (myZoneClass !== 'unkown') {
-        console.log("In watsonHelpController.js/computeZoneStatus #1");
-        console.log("Watson classified Zone " + zoneNumber + " as " + myZoneClass);
-      }
-    }
-    if (myZoneClass === 'SickGrass')
-       {watsonClass="Sick";
-        console.log("In watsonHelpController.js/computeZoneStatus #2");
-        console.log("watsonClass for Zone " + zoneNumber + " is " + watsonClass);
-        zonesClassificationData[zoneNumber] = watsonClass;
-        writeToWateringZoneDB(zoneNumber, watsonClass);
-        cb();
-      }
-    else if (myZoneClass === 'HealthyGrass')
-        {watsonClass="Healthy";
-        console.log("In watsonHelpController.js/computeZoneStatus #2");
-        console.log("watsonClass for Zone " + zoneNumber + " is " + watsonClass);
-        zonesClassificationData[zoneNumber] = watsonClass;
-        writeToWateringZoneDB(zoneNumber, watsonClass);
-        cb();
-        }
-    else {watsonClass='unknown';
+        // if (myZoneClass !== 'unkown') {
+        // console.log("In watsonHelpController.js/computeZoneStatus #2");
+        // console.log("Watson classified Zone " + zoneNumber + " as " + myZoneClass);
+      // }
+    // } //if err
+        console.log("In watsonHelpController.js/computeZoneStatus #2, myZoneClass: ", myZoneClass);
+        console.log("I'm still alive!");
+        if (myZoneClass == JSON.stringify("SickGrass")) {
+          watsonClass="Sick";
           console.log("In watsonHelpController.js/computeZoneStatus #2");
           console.log("watsonClass for Zone " + zoneNumber + " is " + watsonClass);
           zonesClassificationData[zoneNumber] = watsonClass;
-          writeToWateringZoneDB(zoneNumber, watsonClass);
+          updateWateringZoneDB(zoneNumber, watsonClass);
           cb();
-    };
-    
+        } // if myZoneClass = 'SickGrass'
+        else if (myZoneClass == JSON.stringify("HealthyGrass")) {
+          watsonClass="Healthy";
+          console.log("In watsonHelpController.js/computeZoneStatus #2");
+          console.log("watsonClass for Zone " + zoneNumber + " is " + watsonClass);
+          zonesClassificationData[zoneNumber] = watsonClass;
+          updateWateringZoneDB(zoneNumber, watsonClass);
+          cb();
+        }  // else if myZoneClass = 'HealthyGrass' 
+        else if (myZoneClass === JSON.stringify("unknown")) {
+          watsonClass="unknown";
+          console.log("In watsonHelpController.js/computeZoneStatus #2");
+          console.log("watsonClass for Zone " + zoneNumber + " is " + watsonClass);
+          zonesClassificationData[zoneNumber] = watsonClass;
+          updateWateringZoneDB(zoneNumber, watsonClass);
+          cb();
+        }; // else watsonClass = 'unknown'
+        // console.log("I'm still very much alive!");
+        console.log("In watsonHelpController.js/computeZoneStatus #2 finished and zonesClassification data array is now:", zonesClassificationData);
+    }
   });
-
 
   // var watsonClass = callWatson(imageStream, function(err, result){
   //     if (err) {console.log("Error in callWatson")}
@@ -155,7 +179,7 @@ computeZoneStatus = (zoneNumber,cb) => {
 
  function zoneLoop(cb) {
   console.log("In watsonHelpController.js/Now identifying images to be processed");
-  for (let index = 0; index < 6; index++) {
+  for (let index = 1; index < 7; index++) {
     computeZoneStatus(index, function(){
       countOfZoneLoop++;
     });
@@ -176,33 +200,4 @@ module.exports = {
   }
   
 };
-  //   db.zoneDB
-  //   var alteredResponse = [];
-  //   for (let index = 0; index < response.data.forecast.simpleforecast.forecastday.length; index++) {
-  //     alteredResponse[index] = {
-  //                                         epoch:  response.data.forecast.simpleforecast.forecastday[index].date.epoch,     
-  //                                           day:  response.data.forecast.simpleforecast.forecastday[index].date.weekday_short,
-  //                                      timeDate:  response.data.forecast.simpleforecast.forecastday[index].date.pretty,
-  //                                      tempHigh:  response.data.forecast.simpleforecast.forecastday[index].high.fahrenheit,
-  //                                       tempLow:  response.data.forecast.simpleforecast.forecastday[index].low.fahrenheit,
-  //                                    conditions:  response.data.forecast.simpleforecast.forecastday[index].conditions,
-  //                                    // <img src="http://icons.wxug.com/i/c/k/clear.gif" alt=""/>
-  //                                    // <img src="http://icons.wxug.com/i/c/k/cloudy.gif" alt=""/>
-  //                                //  conditionsURL:  '<img src="'+response.data.forecast.simpleforecast.forecastday[index].icon_url+'" alt=""/>',
-  //                                 conditionsURL:  response.data.forecast.simpleforecast.forecastday[index].icon_url,
-  //                                        avgHum:  response.data.forecast.simpleforecast.forecastday[index].avehumidity,
-  //                                           pop:  response.data.forecast.simpleforecast.forecastday[index].pop
-  //                                };
-  //   } //for
-  //  console.log("____________alteredResponse____________");
-  //  console.log(alteredResponse);
-  //  db.WateringZone
-  //      .removeDB
-  //      .create(alteredResponse);
-
-    // db.CityWateringRest
-    //   .find(req.query)
-    //   .sort({ date: -1 })
-    //   .then(dbCityWateringRest => res.json(dbCityWateringRest))
-    //   .catch(err => res.status(422).json(err));
 
