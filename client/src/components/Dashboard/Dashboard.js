@@ -34,6 +34,7 @@ function zoneImageFormatter(cell, row){
 const weatherColumns = [{
   dataField: 'epoch',
   text: 'Epoch Time',
+  sort: true,
   align: 'center'
 },{
   dataField: 'day',
