@@ -7,6 +7,8 @@ module.exports = {
     db.CityWateringRest
       .find(req.query)
       .sort({ date: -1 })
+      // .then(dbWateringZone => {const x = res.json(dbWateringZone);
+      //   console.log('dbWateringZone = ', dbWateringZone); return x})
       .then(dbCityWateringRest => res.json(dbCityWateringRest))
       .catch(err => res.status(422).json(err));
   },

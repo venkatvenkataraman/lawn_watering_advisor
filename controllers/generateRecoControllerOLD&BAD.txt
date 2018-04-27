@@ -37,34 +37,30 @@ function dayIndex(dayName){
 
 //Global Variable
 var tenDayPop;
-async function getForecasted10DayPoP() {
+function getForecasted10DayPoP() {
   // db.WeatherFC.find({},{_id:0, pop:1}, function (err, tenDayPop) {
-    await db.WeatherFC.find({},{_id:0, pop:1}, function (err, result) {
-                                        if (err) {
-                                           console.log ("Find Error", err);
-                                        }
+    db.WeatherFC.find({},{_id:0, pop:1}, function (err, result) {
+                                        if (err) {console.log ("Find Error", err)}
                                         else {
                                            console.log ("Ten Day Pop: ", result);
                                            tenDayPop = result;
                                            console.log ("The REAL Ten Day Pop: ", tenDayPop);
                                         }
-                                       
+                                        return tenDayPop;
   });           
 }
 
 //Global Variable
 var cityWateringRestrictions;
-async function getCityWateringRestrictions() {
+function getCityWateringRestrictions() {
   // db.CityWateringRest.find({}, function (err, cityWateringRestrictions) {
-    await db.CityWateringRest.find({}, function (err, result) {
-                                   if (err) {
-                                     console.log ("Find Error", err);
-                                   }
+    db.CityWateringRest.find({}, function (err, result) {
+                                   if (err) {console.log ("Find Error", err)}
                                    else {
                                       console.log ("City Watering Restrictions: ", result);
                                       cityWateringRestrictions = result;
                                    }
-
+                                   return cityWateringRestrictions;
   });           
 }
   
@@ -84,7 +80,7 @@ function goodChanceOfRainNext5days() {
 //Global variable
 var inMemZone;
 // Compute zone watering needs based on some simple logic
-const computeNextWaterDateTime = async (zoneNumber,inMemZone) => {
+computeNextWaterDateTime = (zoneNumber,inMemZone) => {
       var wDay1 = cityWateringRestrictions[0].wateringDay1, 
           wDay2 = cityWateringRestrictions[0].wateringDay2, 
           wDay3 = cityWateringRestrictions[0].wateringDay3,
@@ -137,9 +133,8 @@ const computeNextWaterDateTime = async (zoneNumber,inMemZone) => {
       }
       inMemZone.projectedNextWaterDateTime = nextWaterDateTimeEpoch;
       console.log("Setting zoneStatus and projectedNextWaterDateTime with these values: ", inMemZone.zoneStatus, " , ", inMemZone.projectedNextWaterDateTime );
-      await db.WateringZone.update({"zoneNumber": zoneNumber}, {$set: {"zoneStatus": "AW", "projectedNextWaterDateTime": nextWaterDateTimeEpoch}}, function(err, raw){
-        if (err) { console.log("database call to set zoneStatus failed with error:", err);
-        }
+      db.WateringZone.update({"zoneNumber": zoneNumber}, {$set: {"zoneStatus": "AW", "projectedNextWaterDateTime": nextWaterDateTimeEpoch}}, function(err, raw){
+        if (err) { console.log("database call to set zoneStatus failed with error:", err)}
         else {console.log ("database call to set zoneStatus, for zone: ", zoneNumber, " and projectedNextWaterDateTime succeeded with raw = ", raw)}
       });
   }
@@ -154,10 +149,10 @@ const computeNextWaterDateTime = async (zoneNumber,inMemZone) => {
           } else {
             if (curDay > wDay1index) {
               // schedule for next week Day1 Start1
-              nextWaterDateTimeEpoch = todayAtZeroTimeEpoch + 24*60*60*(wDay1index+7-curDay);
+              nextWateringDateEpoch = todayAtZeroTimeEpoch + 24*60*60*(wDayindex+7-curDay);
             }
             else {  // Today is the watering day. Code any sprinkler program changes if they haven't alreay run
-              nextWaterDateTimeEpoch = todayAtZeroTimeEpoch;
+              nextWateringDateEpoch = todayAtZeroTimeEpoch;
             }
           }
 
@@ -166,54 +161,50 @@ const computeNextWaterDateTime = async (zoneNumber,inMemZone) => {
           const rainChancesAgain = tenDayPop.slice(0,5);
           console.log("In computeNextWaterDateTime; rainChancesAgain = ", rainChancesAgain);
           if ((JSON.parse(rainChancesAgain[0].pop) >= 40) || (JSON.parse(rainChancesAgain[0].pop) >= 40)){
-            nextWaterDateTimeEpoch = nextWaterDateTimeEpoch + 7*24*60*60;
+            nextWateringDateEpoch = nextWateringDateEpoch + 7*24*60*60;
           }
           console.log("nextWaterDateTimeEpoch for zone: ", zoneNumber, " that has been calculated is: ", nextWaterDateTimeEpoch);
           inMemZone.projectedNextWaterDateTime = nextWaterDateTimeEpoch;
-          await db.WateringZone.update({"zoneNumber": zoneNumber}, {$set: {"zoneStatus": "NW", "projectedNextWaterDateTime": nextWaterDateTimeEpoch}}, function(err, raw){
-            if (err) { console.log("database call to set zoneStatus failed with error:", err);
-            }
+          db.WateringZone.update({"zoneNumber": zoneNumber}, {$set: {"zoneStatus": "NW", "projectedNextWaterDateTime": nextWaterDateTimeEpoch}}, function(err, raw){
+            if (err) { console.log("database call to set zoneStatus failed with error:", err)}
             else {console.log ("database call to set zoneStatus, for zone: ", zoneNumber, " and projectedNextWaterDateTime succeeded with raw = ", raw)}
           });
       }
     }
   }
 
-async function updateWateringZoneDB(zoneNumber){
-  await db.WateringZone
+function updateWateringZoneDB(zoneNumber){
+  db.WateringZone
    .find({"zoneNumber": zoneNumber}, function(err, inMemZone) {
     if (!err){ 
       console.log("In generateRecoController.js/updateWateringZoneDB");
       console.log("zoneNumber: ", zoneNumber, " inMemZone: ", inMemZone); 
-      computeNextWaterDateTime(zoneNumber,inMemZone, function(err){
-        if (err) console.log("updateWateringZoneDB: computeNextWaterDateTime failed with err:", err);
-        else console.log("zone ", zoneNumber, " should now be updated with the nextWaterDateTime!");
-      });
-      
+      computeNextWaterDateTime(zoneNumber,inMemZone);
+      console.log("zone ", zoneNumber, " should now be updated with the nextWaterDateTime!");
     } else {throw err;}
     })
 }
 
 module.exports = {
-  generateZoneRecos: async function(req, res) {
-    console.log("In controller/generateRecoController - READY TO DO GREAT THINGS");
-    await getForecasted10DayPoP();
-    await getCityWateringRestrictions();
+  generateZoneRecos: function(req, res) {
+    console.log("In controller/generateRecoController - READY TO DO GREAT THINGS!");
+
+    // getForecasted10DayPoP(tenDayPop)
+    // .then (function () {
+    //   getCityWateringRestrictions(cityWateringRestrictions);
+    // }
+    // .then (function () {
+    //     for (let index = 1; index < 7; index++) {
+    //       updateWateringZoneDB(index);
+    //     }
+    //   }
+    // ))
+
+
+    getForecasted10DayPoP();
+    getCityWateringRestrictions();
     for (let index = 1; index < 7; index++) {
-      await updateWateringZoneDB(index);
+      updateWateringZoneDB(index);
     }
-    // getForecasted10DayPoP(function(err){
-    //   if (err) console.log('generateRecoController failed in 10 Day Pop with err = ', err);
-    //   else {
-    //     getCityWateringRestrictions(function (err2){
-    //       if (err2) console.log('generateRecoController failed to get watering restrictions. err2 = ', err2);
-    //       else
-    //         for (let index = 1; index < 7; index++) {
-    //         updateWateringZoneDB(index);
-    //       }
-    //     })
-    //   }    
-    // });
   }
-}
-    
+};

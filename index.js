@@ -15,9 +15,6 @@ require('./models/user.js');
 // require('./models/Survey');
 require('./services/passport');
 
-//turning on mongoose
-mongoose.connect(keys.mongoURI);
-
 //turning on app
 const app = express();
 
