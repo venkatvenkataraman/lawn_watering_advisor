@@ -8,7 +8,7 @@ import Features from "./Test_Sections/Features/Features";
 import Footer from "./Test_Sections/Footer/Footer";
 import Header from "./Test_Sections/Header/Header";
 import Packages from "./Test_Sections/Packages/Packages";
-import Stories from "./Test_Sections/Stories/Stories";
+// import Stories from "./Test_Sections/Stories/Stories";
 
 import "./Test.css";
 

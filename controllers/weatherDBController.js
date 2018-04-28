@@ -6,7 +6,7 @@ module.exports = {
   findAll: function(req, res) {
     db.WeatherFC
       .find(req.query)
-      .sort({ date: -1 })
+      .sort({epoch: 1 })
       .then(dbWeatherFC => res.json(dbWeatherFC))
       .catch(err => res.status(422).json(err));
   },

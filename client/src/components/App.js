@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 import Header from './Header';
-import Landing from './Landing';
+// import Landing from './Landing';
 import WeatherForecast from "./Weather";
 import ZoneInfo from "./Zone";
 import Dashboard from "./Dashboard";

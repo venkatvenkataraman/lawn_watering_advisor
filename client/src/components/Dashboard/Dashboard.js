@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Jumbotron from "../Jumbotron";
+// import Jumbotron from "../Jumbotron";
 import Footer from "../Footer";
 import API from "../../utils/API";
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -32,17 +32,17 @@ function zoneImageFormatter(cell, row){
 }
 
 const weatherColumns = [{
-  dataField: 'epoch',
-  text: 'Epoch Time',
-  sort: true,
-  align: 'center'
-},{
-  dataField: 'day',
-  text: 'Day',
-  align: 'center'
-}, {
+//   dataField: 'epoch',
+//   text: 'Epoch Time',
+//   sort: true,
+//   align: 'center'
+// },{
   dataField: 'timeDate',
   text: 'Time and Date',
+  align: 'center'
+}, {
+  dataField: 'day',
+  text: 'Day',
   align: 'center'
 }, {
   dataField: 'tempHigh',
@@ -77,7 +77,7 @@ const zoneColumns = [{
   align: 'center'
   // ,
   // width:'5%'
-},{
+}, {
   dataField: 'drainage',
   text: 'Zone Drainage',
   align: 'center',
@@ -141,7 +141,7 @@ const zoneColumns = [{
   dataField: 'zoneImage',
   text: 'Zone Image',
   formatter: zoneImageFormatter
-}, , {
+}, {
   dataField: 'zoneImageDate',
   text: 'Zone Image Processing Date'
 }];
